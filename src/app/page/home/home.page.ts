@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
   }
   async takePicture() {
     const result = await Camera.pickImages({
-      quality: 70,
+      quality: 80,
       width: 1920,
       height: 1440,
     });
