@@ -1,0 +1,18 @@
+<ion-content class="ion-padding">
+<h2 class="ion-text-center ion-padding-vertical" style="padding: 30px 0">Utsource单据上传系统</h2>
+  <ion-item>
+    <ion-label position="floating">用户名</ion-label>
+    <ion-input [(ngModel)]="UserName"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">密码</ion-label>
+    <ion-input [(ngModel)]="PassWord" type="password"></ion-input>
+  </ion-item>
+  <div class="ion-text-center ion-padding-vertical" style="margin-top: 50px">
+    <ion-button class="ion-margin-end" style="width: 35%" (click)="gohome()">登录</ion-button>
+    <ion-button class="ion-margin-start" style="width: 35%" href="#">重置</ion-button>
+  </div>
+
+
+
+</ion-content>
