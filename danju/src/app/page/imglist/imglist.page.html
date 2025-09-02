@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{UpTime}}</ion-title>
+    <ion-buttons slot="end" routerLink="/addimg/{{UpTime}}" [queryParams]="{Cate:Cate}">
+      <ion-button>
+        编辑
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content CLASS="bianji">
+  <div class='beizhu'>
+    <ion-textarea autoGrow="true" [(ngModel)]="Remark"></ion-textarea>
+  </div>
+  <P class="danju">
+    单据类型
+    <SPAN class="ion-float-right">
+      {{Cate}}
+    </SPAN>
+  </P>
+  <ion-row class="upfile">
+    <ion-col size="4"  *ngFor="let item of Imgs;let i=index;" (click)="open(i)">
+      <div class="list ion-text-center ion-float-left">
+        <div style="height: 100px;overflow: hidden">
+          <ion-img [src]="item"></ion-img>
+        </div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+<!--  <div class="upfile ion-padding-top ion-padding">-->
+<!--    <div class="list ion-text-center ion-float-left" *ngFor="let item of Imgs;let i=index;" (click)="open(i)">-->
+<!--      <ion-img [src]="item"></ion-img>-->
+<!--    </div>-->
+<!--  </div>-->
+
+</ion-content>
