@@ -1,22 +1,22 @@
 import { Component, OnInit } from "@angular/core";
 import { ActionSheetController, MenuController } from "@ionic/angular";
-import { Storage } from "@ionic/storage";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataService, NativeService } from "../../service";
 import { Camera } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
+import { AppConfig } from "../../config/env";
 // declare var window;
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.page.html",
-  styleUrls: ["./home.page.scss"],
+    selector: "app-home",
+    templateUrl: "./home.page.html",
+    styleUrls: ["./home.page.scss"],
+    standalone: false
 })
 export class HomePage implements OnInit {
   newitemimg = [];
   itemimgurl = [];
   UpTime = "";
   constructor(
-    private storage: Storage,
     private router: Router,
     public http: DataService,
     public photoService: NativeService,
@@ -70,7 +70,7 @@ export class HomePage implements OnInit {
           this.newitemimg.push(data.response.FileName);
           // this.itemimgurl.push(data.reqUri);
           this.http.imgName.push(
-            "https://upup.utsource.net/" + data.response.FileName,
+            `${AppConfig.newUPUrl()}/` + data.response.FileName,
           );
         }
         shuliang = shuliang + 1;
@@ -82,7 +82,7 @@ export class HomePage implements OnInit {
     }
   }
   Logout() {
-    this.storage.remove("ISlogin");
+    localStorage.removeItem("ISlogin");
     this.router.navigate(["/login"]);
   }
 }

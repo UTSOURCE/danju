@@ -31,7 +31,8 @@ export class NativeService {
       } else {
         fileName = path.substr(path.lastIndexOf("/") + 1);
       }
-
+      console.log(fileName);
+      console.log(reqUri);  
       const uploadOptions: UploadFileOptions = {
         url: encodeURI(reqUri),
         fileKey: "file",

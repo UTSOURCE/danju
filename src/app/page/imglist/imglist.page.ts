@@ -4,9 +4,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import {BigimgPage} from '../bigimg/bigimg.page';
 @Component({
-  selector: 'app-imglist',
-  templateUrl: './imglist.page.html',
-  styleUrls: ['./imglist.page.scss'],
+    selector: 'app-imglist',
+    templateUrl: './imglist.page.html',
+    styleUrls: ['./imglist.page.scss'],
+    standalone: false
 })
 export class ImglistPage implements OnInit {
   UpTime;

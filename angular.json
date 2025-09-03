@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "defaultProject": "app",
   "newProjectRoot": "projects",
   "projects": {
     "app": {
@@ -81,20 +80,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "app:build"
+            "buildTarget": "app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "app:build:production"
+              "buildTarget": "app:build:production"
             },
-            "ci": {
-            }
+            "ci": {}
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app:build"
+            "buildTarget": "app:build"
           }
         },
         "test": {
@@ -140,37 +138,15 @@
               "devServerTarget": "app:serve:ci"
             }
           }
-        },
-        "ionic-cordova-build": {
-          "builder": "@ionic/angular-toolkit:cordova-build",
-          "options": {
-            "browserTarget": "app:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "app:build:production"
-            }
-          }
-        },
-        "ionic-cordova-serve": {
-          "builder": "@ionic/angular-toolkit:cordova-serve",
-          "options": {
-            "cordovaBuildTarget": "app:ionic-cordova-build",
-            "devServerTarget": "app:serve"
-          },
-          "configurations": {
-            "production": {
-              "cordovaBuildTarget": "app:ionic-cordova-build:production",
-              "devServerTarget": "app:serve:production"
-            }
-          }
         }
       }
     }
   },
   "cli": {
-    "defaultCollection": "@ionic/angular-toolkit",
-    "analytics": "8e18b105-c326-41fc-9dd1-aa4bdb9c39da"
+    "analytics": "8e18b105-c326-41fc-9dd1-aa4bdb9c39da",
+    "schematicCollections": [
+      "@ionic/angular-toolkit"
+    ]
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

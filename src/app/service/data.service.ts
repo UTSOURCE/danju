@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import {  HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AppConfig } from '../../app/config/env';
-import { Storage } from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +8,7 @@ import { Storage } from '@ionic/storage';
 export class DataService {
     imgName = [];
     allCate = [];
-    constructor(public http: HttpClient, public storage: Storage) {}
+    constructor(public http: HttpClient) {}
     xinxi(sid: any, lan: any, tk: any, cod: any, cty: any) { // 公共信息存储
         if (sid){
             localStorage.setItem('_sid', sid);

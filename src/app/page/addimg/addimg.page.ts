@@ -1,15 +1,15 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataService, NativeService } from "../../service";
-import { Storage } from "@ionic/storage";
 import { AppConfig } from "../../config/env";
 import { Camera } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 
 @Component({
-  selector: "app-addimg",
-  templateUrl: "./addimg.page.html",
-  styleUrls: ["./addimg.page.scss"],
+    selector: "app-addimg",
+    templateUrl: "./addimg.page.html",
+    styleUrls: ["./addimg.page.scss"],
+    standalone: false
 })
 export class AddimgPage implements OnInit {
   imgUrl = AppConfig.imgUrl();
@@ -29,7 +29,6 @@ export class AddimgPage implements OnInit {
     private router: Router,
     public route: ActivatedRoute,
     public photoService: NativeService,
-    private storage: Storage,
     public changeDetectorRef: ChangeDetectorRef,
     public http: DataService,
   ) {}
@@ -39,11 +38,10 @@ export class AddimgPage implements OnInit {
       this.oldCate = params.Cate;
       console.log(this.oldCate);
     });
-    this.storage.get("Cate").then((name) => {
-      if (name) {
-        this.Cate = name;
-      }
-    });
+    const name = localStorage.getItem("Cate");
+    if (name) {
+      this.Cate = name;
+    }
     this.allCate = this.http.allCate;
   }
   ionViewDidEnter() {
@@ -67,7 +65,7 @@ export class AddimgPage implements OnInit {
     this.http.images(data).then((res: any) => {
       console.log(res);
       if (res.rtn === "LoginEx") {
-        this.storage.remove("ISlogin");
+        localStorage.removeItem("ISlogin");
         this.router.navigate(["/login"]);
         return;
       }
@@ -85,7 +83,7 @@ export class AddimgPage implements OnInit {
   }
   upload() {
     this.http.imgName = [];
-    this.storage.set("Cate", this.Cate);
+    localStorage.setItem("Cate", this.Cate);
     this.photoService.showLoading();
     for (const item of this.Imgs) {
       if (item.indexOf("https://upup.utsource.net/") !== -1) {

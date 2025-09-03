@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
 @Component({
-  selector: 'app-bigimg',
-  templateUrl: './bigimg.page.html',
-  styleUrls: ['./bigimg.page.scss'],
+    selector: 'app-bigimg',
+    templateUrl: './bigimg.page.html',
+    styleUrls: ['./bigimg.page.scss'],
+    standalone: false
 })
 export class BigimgPage implements OnInit {
   url = '';
