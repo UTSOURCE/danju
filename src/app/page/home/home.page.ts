@@ -52,11 +52,14 @@ export class HomePage implements OnInit {
       quality: 80,
       width: 1920,
       height: 1440,
+      limit: 1,
     });
     this.photoService.showLoading();
     let shuliang = 0;
     const isWeb = Capacitor.getPlatform() === "web";
+    console.log(result);
     for (const item of result.photos) {
+      console.log(item);
       const path = isWeb ? item.webPath : item.path;
       this.photoService.shangchuanFlie(path).then((data: any) => {
         console.log(data, "上传后");
