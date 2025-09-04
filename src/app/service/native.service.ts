@@ -17,36 +17,36 @@ export class NativeService {
    * 上传文件
    */
   shangchuanFlie = async (path: string) => {
-    const reqUri = this.getUrl();
+    const action = this.getUrl();
     try {
-      const isWeb = Capacitor.getPlatform() === "web";
       let blob: Blob | undefined;
       let fileName: string;
 
-      if (isWeb) {
-        const response = await fetch(path);
-        blob = await response.blob();
-        const extension = blob.type.split("/")[1];
-        fileName = `${new Date().getTime()}.${extension}`;
-      } else {
-        fileName = path.substr(path.lastIndexOf("/") + 1);
-      }
+      // Web 端：通过 fetch 读取 webPath 并转为 Blob
+      const oldresponse = await fetch(path);
+      console.log(oldresponse);
+      blob = await oldresponse.blob();
+      console.log(blob);
+      const extension = (blob.type && blob.type.includes("/")) ? blob.type.split("/")[1] : "bin";
+      fileName = `${new Date().getTime()}.${extension}`;
+
       console.log(fileName);
-      console.log(reqUri);  
-      const uploadOptions: UploadFileOptions = {
-        url: encodeURI(reqUri),
-        fileKey: "file",
-        headers: {
-          "Content-Disposition": `form-data; name="file"; filename="${fileName}"`,
+      console.log(action);
+
+      // 通过 Promise 化的 upload 发送
+      const response = await this.upload({
+        file: blob,
+        filename: fileName,
+        data: {
+          code: new Date().getTime().toString(),
         },
-        path: isWeb ? undefined : path,
-        blob: blob,
-        chunkedMode: !isWeb,
-      };
-      const response = await FileTransfer.uploadFile(uploadOptions);
-      return { ...response, reqUri };
+        action,
+      });
+      console.log(response);
+      return { ...response, reqUri: action };
     } catch (err) {
-      this.showToast("Fail!", err);
+      console.error(err);
+      this.showToast("上传失败", 2000);
       throw err;
     }
   };
@@ -101,44 +101,46 @@ export class NativeService {
     return action;
   }
 
-  upload(option: any) {
-    if (typeof XMLHttpRequest === "undefined") {
-      return;
-    }
-    const xhr = new XMLHttpRequest();
-    const Zthis = this;
-    const formData = new FormData();
-    if (option.data) {
-      Object.keys(option.data).forEach((key) => {
-        formData.append(key, option.data[key]);
-      });
-    }
-    const action = this.getUrl();
-    formData.append(option.filename, option.file, option.file.name);
-    xhr.onerror = function error(e) {
-      option.onError(e);
-    };
-    xhr.onload = function onload() {
-      if (xhr.status < 200 || xhr.status >= 300) {
-        return option.onError(Zthis.getError(action, option, xhr));
+  upload(option: { file: Blob; filename: string; data?: any; headers?: any; withCredentials?: boolean; action?: string; }): Promise<{ responseCode: number; response: any; }> {
+    return new Promise((resolve, reject) => {
+      if (typeof XMLHttpRequest === "undefined") {
+        return reject(new Error("XMLHttpRequest is undefined"));
       }
-
-      option.onSuccess(Zthis.getBody(xhr));
-    };
-
-    xhr.open("post", action, true);
-    if (option.withCredentials && "withCredentials" in xhr) {
-      xhr.withCredentials = true;
-    }
-    const headers = option.headers || {};
-
-    for (const item in headers) {
-      if (headers.hasOwnProperty(item) && headers[item] !== null) {
-        xhr.setRequestHeader(item, headers[item]);
+      const xhr = new XMLHttpRequest();
+      const formData = new FormData();
+      if (option.data) {
+        Object.keys(option.data).forEach((key) => {
+          formData.append(key, option.data[key]);
+        });
       }
-    }
-    xhr.send(formData);
-    return xhr;
+      const action = option.action ?? this.getUrl();
+      // 正确的字段名应为 file
+      formData.append("file", option.file, option.filename);
+
+      xhr.onerror = (e) => {
+        reject(this.getError(action, option, xhr));
+      };
+
+      xhr.onload = () => {
+        const body = this.getBody(xhr);
+        if (xhr.status < 200 || xhr.status >= 300) {
+          return reject(this.getError(action, option, xhr));
+        }
+        resolve({ responseCode: xhr.status, response: body });
+      };
+
+      xhr.open("post", action, true);
+      if (option.withCredentials && "withCredentials" in xhr) {
+        xhr.withCredentials = true;
+      }
+      const headers = option.headers || {};
+      for (const item in headers) {
+        if (headers.hasOwnProperty(item) && headers[item] !== null) {
+          xhr.setRequestHeader(item, headers[item]);
+        }
+      }
+      xhr.send(formData);
+    });
   }
 
   getBody(xhr) {

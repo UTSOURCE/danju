@@ -30,6 +30,7 @@
     "@capacitor/status-bar": "^7.0.0",
     "@ionic/angular": "^8.7.3",
     "core-js": "3.45.1",
+    "pako": "^2.1.0",
     "rxjs": "^7.5.0",
     "tslib": "^2.0.0",
     "typescript": "~5.5.4",
