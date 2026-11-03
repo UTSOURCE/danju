@@ -6,8 +6,8 @@ import { AppConfig } from '../../app/config/env';
     providedIn: 'root'
 })
 export class DataService {
-    imgName = [];
-    allCate = [];
+    imgName: any[] = [];
+    allCate: any[] = [];
     constructor(public http: HttpClient) {}
     xinxi(sid: any, lan: any, tk: any, cod: any, cty: any) { // 公共信息存储
         if (sid){
@@ -31,7 +31,7 @@ export class DataService {
         };
         return publiccanshu;
     }
-    sharepost(body) {
+    sharepost(body: any) {
         return new Promise((resolve, reject) => {
             this.http.post(AppConfig.postUrl() + body.cmd, Object.assign(body, this.getcanshu())).subscribe((res: any) => {
                 if (!localStorage.getItem('_sid')) {
@@ -43,7 +43,7 @@ export class DataService {
             });
         });
     }
-    login(UserName, PassWord) { // 登录
+    login(UserName: string, PassWord: string) { // 登录
         const body = {
             cmd: 'bill/account/login',
             data: '{"UserName":"' + UserName + '","PassWord":"' + PassWord + '"}'
@@ -64,35 +64,35 @@ export class DataService {
         };
         return this.sharepost(body);
     }
-    addimg(data) {
+    addimg(data: any) {
         const body = {
             cmd: 'bill/image/add',
             data: JSON.stringify(data)
         };
         return this.sharepost(body);
     }
-    images(data) {
+    images(data: any) {
         const body = {
             cmd: 'bill/image/images',
             data: JSON.stringify(data)
         };
         return this.sharepost(body);
     }
-    imagesList(data) {
+    imagesList(data: any) {
         const body = {
             cmd: 'bill/image/list',
             data: JSON.stringify(data)
         };
         return this.sharepost(body);
     }
-    delimages(data) {
+    delimages(data: any) {
         const body = {
             cmd: 'bill/image/del',
             data: JSON.stringify(data)
         };
         return this.sharepost(body);
     }
-    updateimages(data) {
+    updateimages(data: any) {
         const body = {
             cmd: 'bill/image/update',
             data: JSON.stringify(data)

@@ -1,21 +1,24 @@
-import { Component, OnInit } from "@angular/core";
-import { ActionSheetController, MenuController } from "@ionic/angular";
+import { Component, OnInit, ChangeDetectionStrategy, signal } from "@angular/core";
+import { ActionSheetController, MenuController, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonImg, IonMenuButton, IonRow, IonTitle, IonToolbar } from "@ionic/angular";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataService, NativeService } from "../../service";
 import { Camera } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
 import { AppConfig } from "../../config/env";
 import { ungzip } from "pako";
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 // declare var window;
 @Component({
     selector: "app-home",
     templateUrl: "./home.page.html",
     styleUrls: ["./home.page.scss"],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [FormsModule, RouterModule, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonImg, IonMenuButton, IonRow, IonTitle, IonToolbar],
 })
 export class HomePage implements OnInit {
-  newitemimg = [];
-  itemimgurl = [];
+  newitemimg: any[] = [];
+  itemimgurl = signal<any[]>([]);
   UpTime = "";
   constructor(
     private router: Router,
@@ -76,7 +79,7 @@ export class HomePage implements OnInit {
       return null;
     }
   }
-  getimagesList(time) {
+  getimagesList(time: string) {
     const data = {
       UpTime: time,
     };
@@ -86,7 +89,7 @@ export class HomePage implements OnInit {
         return;
       }
       if (res.data.Status === 1) {
-        this.itemimgurl = res.data.Imgs;
+        this.itemimgurl.set(res.data.Imgs);
       }
     });
   }

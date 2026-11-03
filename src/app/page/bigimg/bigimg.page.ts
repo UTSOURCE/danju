@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import {ModalController, NavParams} from '@ionic/angular';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {ModalController, NavParams, IonButtons, IonContent, IonHeader, IonIcon, IonImg, IonToolbar } from '@ionic/angular';
 @Component({
     selector: 'app-bigimg',
     templateUrl: './bigimg.page.html',
     styleUrls: ['./bigimg.page.scss'],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [IonButtons, IonContent, IonHeader, IonIcon, IonImg, IonToolbar],
 })
 export class BigimgPage implements OnInit {
   url = '';

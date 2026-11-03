@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 export class CheckTutorial  {
   constructor(private router: Router) {}
 
-  canLoad() {
+  canMatch() {
     return Promise.resolve(localStorage.getItem('ISlogin')).then(res => {
       if (res) {
         this.router.navigate(['/home']);

@@ -1,13 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from '@angular/router';
 import {DataService, NativeService} from '../../service';
-import {NavController} from '@ionic/angular';
+import {NavController, IonButton, IonContent, IonInput, IonItem, IonLabel } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.page.html',
     styleUrls: ['./login.page.scss'],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [FormsModule, IonButton, IonContent, IonInput, IonItem, IonLabel],
 })
 export class LoginPage implements OnInit {
     UserName = '';
@@ -38,6 +40,9 @@ export class LoginPage implements OnInit {
             }else {
                 this.photoService.showToast(res.data.Message);
             }
+        }).catch(() => {
+            this.photoService.hideLoading();
+            this.photoService.showToast('网络异常，请检查网络后重试');
         });
     }
 }

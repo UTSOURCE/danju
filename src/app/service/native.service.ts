@@ -143,7 +143,7 @@ export class NativeService {
     });
   }
 
-  getBody(xhr) {
+  getBody(xhr: XMLHttpRequest) {
     const text = xhr.responseText || xhr.response;
     if (!text) {
       return text;
@@ -156,7 +156,7 @@ export class NativeService {
     }
   }
 
-  getError(action, option, xhr) {
+  getError(action: string, option: { file: Blob; filename: string }, xhr: XMLHttpRequest) {
     let msg;
     if (xhr.response) {
       msg = `${xhr.response.error || xhr.response}`;

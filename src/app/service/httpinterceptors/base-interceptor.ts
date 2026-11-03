@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
-import { throwError, Observable } from 'rxjs';
+import { throwError, EMPTY, Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 /*设置请求的基地址，方便替换*/
 // const baseurl = '';
@@ -19,7 +19,7 @@ export class BaseInterceptor implements HttpInterceptor {
                 req.body.data = '{}';
             } else {
                 if (req.body.data.indexOf('undefined') !== -1 ) {
-                    return;
+                    return EMPTY;
                 }
             }
         }

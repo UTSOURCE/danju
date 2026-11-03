@@ -1,30 +1,33 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DataService, NativeService } from "../../service";
 import { AppConfig } from "../../config/env";
 import { Camera } from "@capacitor/camera";
 import { Capacitor } from "@capacitor/core";
+import { IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar } from "@ionic/angular";
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: "app-addimg",
     templateUrl: "./addimg.page.html",
     styleUrls: ["./addimg.page.scss"],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [FormsModule, IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonRow, IonSelect, IonSelectOption, IonTextarea, IonTitle, IonToolbar],
 })
 export class AddimgPage implements OnInit {
   imgUrl = AppConfig.imgUrl();
   list = 0;
   Cate = "深圳月结";
-  allCate = [];
+  allCate = signal<any[]>([]);
   Remark = "";
-  Imgs;
+  Imgs = signal<string[]>([]);
   time = "";
   UpTime = "";
   isImgs = false;
-  allimg;
+  allimg: any;
   Ids = [];
   newimg = [];
-  oldCate;
+  oldCate: string;
   constructor(
     private router: Router,
     public route: ActivatedRoute,
@@ -42,16 +45,16 @@ export class AddimgPage implements OnInit {
     if (name) {
       this.Cate = name;
     }
-    this.allCate = this.http.allCate;
+    this.allCate.set(this.http.allCate);
   }
   ionViewDidEnter() {
     // console.log(this.http.imgName);
     this.UpTime = this.route.snapshot.params.time;
-    this.Imgs = this.http.imgName;
+    this.Imgs.set(this.http.imgName);
     console.log(this.UpTime);
     if (this.UpTime) {
       this.isImgs = true;
-      this.Imgs = [];
+      this.Imgs.set([]);
       this.getimages();
     }
   }
@@ -73,11 +76,12 @@ export class AddimgPage implements OnInit {
         this.Cate = res.data.ImgPage.ResultList[0].Cate;
         this.Remark = res.data.ImgPage.ResultList[0].Remark;
         this.allimg = res.data.ImgPage;
+        const imgs: string[] = [];
         for (const item of res.data.ImgPage.ResultList) {
-          this.Imgs.push(item.ImageName);
+          imgs.push(item.ImageName);
           this.Ids.push(item.id);
-          // this.http.imgName.push(item.ImageName);
         }
+        this.Imgs.set(imgs);
       }
     });
   }
@@ -85,7 +89,7 @@ export class AddimgPage implements OnInit {
     this.http.imgName = [];
     localStorage.setItem("Cate", this.Cate);
     this.photoService.showLoading();
-    for (const item of this.Imgs) {
+    for (const item of this.Imgs()) {
       if (item.indexOf("https://upup.utsource.net/") !== -1) {
         this.newimg.push(item.replace("https://upup.utsource.net/", ""));
       }
@@ -124,7 +128,7 @@ export class AddimgPage implements OnInit {
   onselet() {
     console.log(this.Cate);
   }
-  dele(i) {
+  dele(i: number) {
     if (this.isImgs) {
       console.log();
       const data = {
@@ -132,12 +136,12 @@ export class AddimgPage implements OnInit {
       };
       this.http.delimages(data).then((res: any) => {
         this.allimg.ResultList.splice(i, 1);
-        this.Imgs.splice(i, 1);
+        this.Imgs.update((a) => { a.splice(i, 1); return [...a]; });
         this.Ids.splice(i, 1);
         console.log(this.Ids);
       });
     } else {
-      this.Imgs.splice(i, 1);
+      this.Imgs.update((a) => { a.splice(i, 1); return [...a]; });
     }
   }
   async takePicture() {
@@ -150,7 +154,7 @@ export class AddimgPage implements OnInit {
     let shuliang = 0;
     const isWeb = Capacitor.getPlatform() === "web";
     for (const item of result.photos) {
-      const path = isWeb ? item.webPath : item.path;
+      const path = isWeb ? item.webPath : (item.path as string);
       this.photoService.shangchuanFlie(path).then((data: any) => {
         // console.log(data, '上传后');
         if (data && data.responseCode === 200) {
@@ -159,8 +163,8 @@ export class AddimgPage implements OnInit {
           // this.newimg.push(data.response.FileName);
           // https://utcdn.utsource.info/m_180x135/
           // https://utcdn.utsource.info/f_e98152389ce64b368aa0add5277ecbde.png
-          this.Imgs.unshift(
-            "https://upup.utsource.net/" + data.response.FileName,
+          this.Imgs.update(
+            (a) => ["https://upup.utsource.net/" + data.response.FileName, ...a],
           );
         }
         shuliang = shuliang + 1;

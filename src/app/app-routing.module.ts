@@ -9,32 +9,32 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./page/login/login.module').then( m => m.LoginPageModule),
-    canLoad: [CheckTutorial]
+    loadComponent: () => import('./page/login/login.page').then(m => m.LoginPage),
+    canMatch: [CheckTutorial]
   },
   {
     path: 'home',
-    loadChildren: () => import('./page/home/home.module').then( m => m.HomePageModule)
+    loadComponent: () => import('./page/home/home.page').then(m => m.HomePage)
   },
   {
     path: 'home/:date',
-    loadChildren: () => import('./page/home/home.module').then( m => m.HomePageModule)
+    loadComponent: () => import('./page/home/home.page').then(m => m.HomePage)
   },
   {
     path: 'imglist/:id',
-    loadChildren: () => import('./page/imglist/imglist.module').then( m => m.ImglistPageModule)
+    loadComponent: () => import('./page/imglist/imglist.page').then(m => m.ImglistPage)
   },
   {
     path: 'addimg',
-    loadChildren: () => import('./page/addimg/addimg.module').then( m => m.AddimgPageModule)
+    loadComponent: () => import('./page/addimg/addimg.page').then(m => m.AddimgPage)
   },
   {
     path: 'addimg/:time',
-    loadChildren: () => import('./page/addimg/addimg.module').then( m => m.AddimgPageModule)
+    loadComponent: () => import('./page/addimg/addimg.page').then(m => m.AddimgPage)
   },
   {
     path: 'bigimg',
-    loadChildren: () => import('./page/bigimg/bigimg.module').then( m => m.BigimgPageModule)
+    loadComponent: () => import('./page/bigimg/bigimg.page').then(m => m.BigimgPage)
   }
 ];
 

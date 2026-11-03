@@ -16,19 +16,21 @@
     </ion-buttons>
   </div>
   <div class="upfile ion-padding-top">
-      <ion-row>
-          <ion-col size="4">
-              <div class="list ion-text-center ion-float-left"  style="line-height: 100px;background-color: #F1F2F6;border: 1px solid #999;"(click)="takePicture()">当日上传</div>
-          </ion-col>
-          <ion-col size="4" *ngFor="let item of itemimgurl" [routerLink]="['/imglist',item?.DateStr]" [queryParams]="{Cate:item?.Cate}">
-              <div class="list2 ion-text-center ion-float-left">
-                  <div style="height: 100px;overflow: hidden">
-                      <ion-img [src]="item.ImageName"></ion-img>
-                  </div>
-                  <p>{{item.id}}张 <span class="ion-float-end">{{item.DateStr}}</span></p>
-                  <p>{{item.Cate}}</p>
-              </div>
-          </ion-col>
-      </ion-row>
+    <ion-row>
+      <ion-col size="4">
+        <div class="list ion-text-center ion-float-left"  style="line-height: 100px;background-color: #F1F2F6;border: 1px solid #999;"(click)="takePicture()">当日上传</div>
+      </ion-col>
+      @for (item of itemimgurl(); track item) {
+        <ion-col size="4" [routerLink]="['/imglist',item?.DateStr]" [queryParams]="{Cate:item?.Cate}">
+          <div class="list2 ion-text-center ion-float-left">
+            <div style="height: 100px;overflow: hidden">
+              <ion-img [src]="item.ImageName"></ion-img>
+            </div>
+            <p>{{item.id}}张 <span class="ion-float-end">{{item.DateStr}}</span></p>
+            <p>{{item.Cate}}</p>
+          </div>
+        </ion-col>
+      }
+    </ion-row>
   </div>
 </ion-content>
